@@ -1,7 +1,7 @@
 #include <vector>
-#include <unordered_map>
 #include <map>
 #include <set>
+#include <functional>
 
 namespace mazes {
   class cell {
@@ -9,7 +9,7 @@ namespace mazes {
     // the labyrinth. Each cell has a concept of it's neighbours: via the
     // concept of links.
   public:
-    cell(const int& row, const int& col); 
+    explicit cell(const int& row, const int& col); 
     void link(cell* other, const bool& bidirectional=false);
     void unlink(cell* other, const bool& bidirectional=false);
     // is this cell linked to the other?
@@ -45,8 +45,19 @@ namespace mazes {
   class grid {
     // a cartesian collection of cells, this is our world
   public:
-    grid(int rows, int columns); 
+    explicit grid(int rows, int columns); 
     cell* operator()(int i, int j){ return get_cell_at_loc(i,j);};
+    // return a random cell from the grid
+    cell* random_cell(void);
+    // question: how could we implement an 'each row' or 'each cell'
+    // method, in ruby this would be a yield block
+    void each_cell(std::function<void (cell*)> work_fn);  
+    typedef std::vector<cell>::iterator cell_vec_iter;
+    void each_row(std::function<void (cell_vec_iter, cell_vec_iter)> work_fn);
+
+    int get_rows(void){return rows_;};
+    int get_columns(void){return columns_;};
+    int get_size(void){return rows_*columns_;};
   private:
     // allocs the cells in the grid
     void prepare_grid(void);

@@ -1,5 +1,5 @@
 #include "base.h"
-
+#include <functional>
 #include "gtest/gtest.h"
 
 TEST(TrivialTest, True) {
@@ -92,8 +92,31 @@ TEST(TestGrid, TestBoundary) {
   EXPECT_EQ(cptr, nullptr);
 }
 
+TEST(TestGrid, TestRandom) {
+  mazes::grid the_grid(4,4);
+  mazes::cell* cptr = the_grid.random_cell();
+  EXPECT_TRUE(cptr != nullptr);
+}
 
+void print_cell(mazes::cell* cptr) {
+  std::cout << "n: " << cptr->get_north() << "s: " << cptr->get_south();
+  std::cout << "e: " << cptr->get_east() << "w: " << cptr->get_west() << std::endl;
+}
 
+typedef std::vector<mazes::cell>::iterator cell_vec_iter;
+void print_row(cell_vec_iter start, cell_vec_iter end) {
+  cell_vec_iter curr;
+  for (curr = start; curr != end; ++curr) {
+    std::cout << (*curr).get_north() << " ";
+  }
+  std::cout << std::endl;
+}
+
+TEST(TestGrid, TestEach) {
+  mazes::grid the_grid(4,4);
+  the_grid.each_cell(print_cell);
+  the_grid.each_row(print_row);  
+}
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
