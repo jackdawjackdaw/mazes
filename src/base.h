@@ -20,8 +20,9 @@
 // TODO(gluon): a more consistent api: pick pointers or references
 namespace mazes {
   class cell {
-    // A cell is the fundamental unit of the maze, this represents one 'room' in the
-    // labyrinth. Each cell has a concept of it's neighbours: via the concept of links.
+    // A cell is the fundamental unit of the maze, this represents one 'room' in
+    // the labyrinth. Each cell has a concept of it's neighbours: via the
+    // concept of links.
     // 
     // needs:
     // attr_reader: row, col
@@ -72,7 +73,8 @@ namespace mazes {
     // - a heart!
   public:
     grid(int rows, int columns); 
-    
+    void print_grid();
+    cell* operator()(int i, int j){ return get_cell_at_loc(i,j);};
   private:
     // helper, allocs the cells in the grid
     void prepare_grid(void);

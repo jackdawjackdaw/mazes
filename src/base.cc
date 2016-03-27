@@ -1,8 +1,8 @@
 #include "base.h"
 
 #include <iostream>
-#include <vector>
 #include <map>
+#include <vector>
 
 namespace mazes {
   cell::cell(const int& row, const int& col) {
@@ -40,6 +40,9 @@ namespace mazes {
   }
   
   bool cell::is_linked(cell* other) {
+    if (!other) {
+      return false;
+    }
     auto iter = links_.find(other);
     if (iter != links_.end()){
       return true;
@@ -56,7 +59,7 @@ namespace mazes {
     return res;
   }
   
-
+  // grid stuff
   grid::grid(int rows, int columns) {
     rows_ = rows;
     columns_ = columns;
@@ -73,7 +76,7 @@ namespace mazes {
   }
   
   void grid::prepare_grid(void) {
-    // fill the cell array
+    // allocate the cell array
     for (int i = 0; i < rows_; i++) {
       for(int j = 0; j < columns_; j++) {
         cell_array_.emplace_back(i,j);
