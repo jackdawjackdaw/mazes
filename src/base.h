@@ -1,7 +1,7 @@
-
 #include <vector>
 #include <unordered_map>
 #include <map>
+#include <set>
 
 // who are you, and why
 
@@ -17,6 +17,7 @@
 // 
 // lets focus on the battle
 
+// TODO(gluon): a more consistent api: pick pointers or references
 namespace mazes {
   class cell {
     // A cell is the fundamental unit of the maze, this represents one 'room' in the
@@ -28,30 +29,30 @@ namespace mazes {
     // 
   public:
     // syntax here
-    cell(int row, int col) explicit; 
-    void link(cell& other, bool bidirectional);
-    void unlink(cell& other, bool bidirectional);
+    cell(const int& row, const int& col); 
+    void link(cell* other, const bool& bidirectional=false);
+    void unlink(cell* other, const bool& bidirectional=false);
     // is this cell linked to the other?
-    bool is_linked(cell& other);
+    bool is_linked(cell* other);
     // return the links
-    std::vector<cell&> get_links();
+    std::set<cell*> get_links();
     // return the neighbours
     std::vector<cell*> get_neighbours();
     
     // blurgh, c'mon dude, you can do better than this shit
-    void set_north(cell* other){north_ = other};
-    void set_south(cell* other){south_ = other};
-    void set_east(cell* other){east_   = other};
-    void set_west(cell* other){west_   = other};
+    void set_north(cell* other){north_ = other;};
+    void set_south(cell* other){south_ = other;};
+    void set_east(cell* other){east_   = other;};
+    void set_west(cell* other){west_   = other;};
 
-    void get_north(void){return north_ };
-    void get_south(void){return south_ };
-    void get_east(void){return east_};
-    void get_west(void){return west_};
+    cell* get_north(void){return north_; };
+    cell* get_south(void){return south_; };
+    cell* get_east(void){return east_;};
+    cell* get_west(void){return west_;};
     
   private:
     // links
-    std::unordered_map<cell&, bool> links_;
+    std::set<cell*> links_;
     // where are we
     int row_;
     int column_;
@@ -70,7 +71,7 @@ namespace mazes {
     // - something like an operator override on []
     // - a heart!
   public:
-    grid(int rows, int columns) explicit; 
+    grid(int rows, int columns); 
     
   private:
     // helper, allocs the cells in the grid
@@ -81,11 +82,11 @@ namespace mazes {
     // should run through here,
     // todo(gluon): well ok, but pointer or reference or what man?
     // this can be aliased to [] later...
-    cell& get_cell_at_loc(int row, int col);
+    cell* get_cell_at_loc(int row, int col);
     int rows_;
     int columns_;
     // our actual 2d array of cells, how to allocate this?
-    std::vector<std::vector<cell>> cell_array_;
+    std::vector<cell> cell_array_;
   };
 }
 
