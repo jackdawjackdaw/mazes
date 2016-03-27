@@ -50,10 +50,6 @@ namespace mazes {
     return false;
   }
 
-  std::set<cell*> cell::get_links(void) {
-    return links_;
-  }
-
   std::vector<cell*> cell::get_neighbours(void) {
     std::vector<cell*> res = {north_, south_, east_, west_};
     return res;

@@ -80,8 +80,20 @@ TEST(TestGrid, TestInit) {
   EXPECT_EQ(cptr->get_south(), the_grid(1,2));
   EXPECT_EQ(cptr->get_east(), the_grid(2,3));
   EXPECT_EQ(cptr->get_west(), the_grid(2,1));
-  
 }
+
+TEST(TestGrid, TestBoundary) {
+  mazes::grid the_grid(4,4);
+  mazes::cell* cptr = the_grid(3,3);
+  EXPECT_EQ(cptr->get_north(), nullptr);
+  EXPECT_EQ(cptr->get_east(), nullptr);
+
+  cptr = the_grid(4,5);
+  EXPECT_EQ(cptr, nullptr);
+}
+
+
+
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
