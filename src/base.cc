@@ -3,9 +3,12 @@
 #include <set>
 #include <vector>
 #include <random>
+#include <string>
+#include <iostream>
 
 
 namespace mazes {
+
   cell::cell(const int& row, const int& col) {
     row_ = row;
     column_ = col;
@@ -77,7 +80,7 @@ namespace mazes {
     //std::random_device r;
     // Choose a random mean between 1 and 6
     std::default_random_engine e1(1234); // stupid seed but that's ok for now
-    std::uniform_int_distribution<int> row_dist(0, rows_-1);
+    std::uniform_int_distribution<int> row_dist(0, rows_-1); // this is [a, b]
     std::uniform_int_distribution<int> col_dist(0, columns_-1);
     int rand_row = row_dist(e1);
     int rand_col = col_dist(e1);
@@ -125,4 +128,42 @@ namespace mazes {
     }
   }
     
-}
+  std::string grid::to_string(void) {
+    std::string output = "";
+    cell* cptr = nullptr; 
+
+    for (int i = 0; i < rows_; i++) {
+
+      for (int j = 0; j < columns_; j++) {
+        cptr = get_cell_at_loc(i, j);
+        output += "+";
+        if (cptr->is_linked(cptr->get_south())) {
+          output += "---";
+        } else {
+          output += "   ";
+        }
+      }
+      output += "+\n";
+
+      output += "|   ";
+      for (int j = 1; j < columns_ - 1; j++) {
+        cptr = get_cell_at_loc(i, j);
+        if (cptr->is_linked(cptr->get_east())) {
+          output += "|";
+        } else {
+          output += " ";
+        }
+        output += "   ";
+      }
+      output += "|   |\n";
+
+    }
+
+    for (int i = 0; i < columns_; i++) {
+      output += "+---";
+    }
+    output += "+\n";
+    
+    return output;
+  }
+}  // mazes

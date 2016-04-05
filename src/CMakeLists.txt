@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
 
-add_library(maze base)
+add_library(maze base gen_algs)
+
+add_executable(bin_tree_demo bin_tree_demo)
+target_link_libraries(bin_tree_demo maze) 
+
+
 
 # tests tests tests, keep them in the same place as the source
 enable_testing()

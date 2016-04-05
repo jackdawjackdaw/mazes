@@ -1,7 +1,10 @@
-#include <vector>
+#ifndef INCLUDE_BASE_H_
+#define INCLUDE_BASE_H_
+#include <functional>
 #include <map>
 #include <set>
-#include <functional>
+#include <string>
+#include <vector>
 
 namespace mazes {
   class cell {
@@ -58,6 +61,8 @@ namespace mazes {
     int get_rows(void){return rows_;};
     int get_columns(void){return columns_;};
     int get_size(void){return rows_*columns_;};
+
+    std::string to_string(void);
   private:
     // allocs the cells in the grid
     void prepare_grid(void);
@@ -69,5 +74,7 @@ namespace mazes {
     int columns_;
     std::vector<cell> cell_array_;
   };
-}
 
+} // mazes
+
+#endif //INCLUDE_BASE_H_
