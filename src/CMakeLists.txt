@@ -4,7 +4,7 @@ add_library(maze base gen_algs)
 
 add_executable(bin_tree_demo bin_tree_demo)
 target_link_libraries(bin_tree_demo maze) 
-
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -g -pg -O0")
 
 
 # tests tests tests, keep them in the same place as the source

@@ -21,7 +21,6 @@ namespace mazes {
     // return neighbours (n,s,e,w)
     std::vector<cell*> get_neighbours();
     
-    // blurgh, c'mon dude, you can do better than this shit
     void set_north(cell* other){north_ = other;};
     void set_south(cell* other){south_ = other;};
     void set_east(cell* other){east_   = other;};
@@ -31,6 +30,9 @@ namespace mazes {
     cell* get_south(void){return south_; };
     cell* get_east(void){return east_;};
     cell* get_west(void){return west_;};
+
+    int get_row(void){return row_;};
+    int get_col(void){return column_;};
     
   private:
     // links
@@ -63,6 +65,7 @@ namespace mazes {
     int get_size(void){return rows_*columns_;};
 
     std::string to_string(void);
+    std::string to_string_better(void);
   private:
     // allocs the cells in the grid
     void prepare_grid(void);

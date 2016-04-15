@@ -3,10 +3,14 @@
 #include <random>
 #include <iostream>
 
+// TODO(chris): make this into a strategy pattern
+// Store the RNG as internal state and init it each time
+
 namespace {
-  std::default_random_engine rando(123); // stupid seed but that's ok for now
+  std::default_random_engine rando(12); // stupid seed but that's ok for now
 
   void bin_tree_helper(mazes::cell* cptr) {
+    
     std::vector<mazes::cell*> neighbours;
     if (cptr->get_north()) {
       neighbours.push_back(cptr->get_north());

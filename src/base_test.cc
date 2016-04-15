@@ -7,6 +7,13 @@ TEST(TrivialTest, True) {
   EXPECT_TRUE(true);
 }
 
+TEST(TestCell, TestLoc) {
+  mazes::cell first_cell(1,2);
+  
+  EXPECT_EQ(first_cell.get_row(), 1);
+  EXPECT_EQ(first_cell.get_col(), 2);
+}
+
 TEST(TestCell, SimpleLinking) {
   mazes::cell first_cell(1,2);
   mazes::cell second_cell(2,3);
@@ -75,18 +82,53 @@ TEST(TestCell, GetLinks) {
 TEST(TestGrid, TestInit) {
   mazes::grid the_grid(4,4);
   mazes::cell* cptr = the_grid(2,2);
+  mazes::cell* cother;
   
   EXPECT_EQ(cptr->get_north(), the_grid(3,2));
   EXPECT_EQ(cptr->get_south(), the_grid(1,2));
   EXPECT_EQ(cptr->get_east(), the_grid(2,3));
   EXPECT_EQ(cptr->get_west(), the_grid(2,1));
+
+  cother = cptr->get_north();
+  EXPECT_EQ(cother->get_row(), 3);
+  cother = cptr->get_south();
+  EXPECT_EQ(cother->get_row(), 1);
+  cother = cptr->get_east();
+  EXPECT_EQ(cother->get_col(), 3);
+  cother = cptr->get_west();
+  EXPECT_EQ(cother->get_col(), 1);
+
 }
 
 TEST(TestGrid, TestBoundary) {
   mazes::grid the_grid(4,4);
+  // top right (north east) corner 
   mazes::cell* cptr = the_grid(3,3);
   EXPECT_EQ(cptr->get_north(), nullptr);
   EXPECT_EQ(cptr->get_east(), nullptr);
+  EXPECT_NE(cptr->get_west(), nullptr);
+  EXPECT_NE(cptr->get_south(), nullptr);
+
+  // bottom right corner (south east)
+  cptr = the_grid(0,3);
+  EXPECT_NE(cptr->get_north(), nullptr);
+  EXPECT_EQ(cptr->get_east(), nullptr);
+  EXPECT_NE(cptr->get_west(), nullptr);
+  EXPECT_EQ(cptr->get_south(), nullptr);
+
+  // bottom left corner (south west)
+  cptr = the_grid(0,0);
+  EXPECT_NE(cptr->get_north(), nullptr);
+  EXPECT_NE(cptr->get_east(), nullptr);
+  EXPECT_EQ(cptr->get_west(), nullptr);
+  EXPECT_EQ(cptr->get_south(), nullptr);
+
+  // top left corner (north west)
+  cptr = the_grid(3,0);
+  EXPECT_EQ(cptr->get_north(), nullptr);
+  EXPECT_NE(cptr->get_east(), nullptr);
+  EXPECT_EQ(cptr->get_west(), nullptr);
+  EXPECT_NE(cptr->get_south(), nullptr);
 
   cptr = the_grid(4,5);
   EXPECT_EQ(cptr, nullptr);
@@ -99,15 +141,15 @@ TEST(TestGrid, TestRandom) {
 }
 
 void print_cell(mazes::cell* cptr) {
-  std::cout << "n: " << cptr->get_north() << "s: " << cptr->get_south();
-  std::cout << "e: " << cptr->get_east() << "w: " << cptr->get_west() << std::endl;
+  std::cout << "(" << cptr->get_row() << "," << cptr->get_col() << ")" << std::endl;
 }
 
 typedef std::vector<mazes::cell>::iterator cell_vec_iter;
 void print_row(cell_vec_iter start, cell_vec_iter end) {
   cell_vec_iter curr;
   for (curr = start; curr != end; ++curr) {
-    std::cout << (*curr).get_north() << " ";
+    //std::cout << (*curr).get_north() << " ";
+    print_cell(&(*curr));
   }
   std::cout << std::endl;
 }
@@ -115,6 +157,7 @@ void print_row(cell_vec_iter start, cell_vec_iter end) {
 TEST(TestGrid, TestEach) {
   mazes::grid the_grid(4,4);
   the_grid.each_cell(print_cell);
+  std::cout << std::endl;
   the_grid.each_row(print_row);  
 }
 
