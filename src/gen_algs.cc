@@ -5,12 +5,12 @@
 
 // TODO(chris): make this into a strategy pattern
 // Store the RNG as internal state and init it each time
+// TODO(chris): figure out how to test this, does it even work?
 
 namespace {
-  std::default_random_engine rando(12); // stupid seed but that's ok for now
+  std::default_random_engine rando; // stupid seed but that's ok for now
 
   void bin_tree_helper(mazes::cell* cptr) {
-    
     std::vector<mazes::cell*> neighbours;
     if (cptr->get_north()) {
       neighbours.push_back(cptr->get_north());
@@ -18,13 +18,18 @@ namespace {
     if (cptr->get_east()) {
       neighbours.push_back(cptr->get_east());
     }
+    std::cout << cptr->to_s() << ":" << neighbours.size();
 
-    if(neighbours.size() > 0) {
+    if (neighbours.size() > 0) {
       // pick one
-      std::uniform_int_distribution<int> n_dist(0, neighbours.size()-1); 
+      std::uniform_int_distribution<int> n_dist(0, neighbours.size()-1);
       int n_index = n_dist(rando);
-      cptr->link(neighbours[n_index], true);
+      std::cout << " idx: " << n_index;
+      mazes::cell* other = neighbours[n_index];
+      std::cout << " other: " << other->to_s();
+      cptr->link(other, true);
     }
+    std::cout << std::endl;
   }
 } // end anonymous namespace
 

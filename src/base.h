@@ -33,6 +33,7 @@ namespace mazes {
 
     int get_row(void){return row_;};
     int get_col(void){return column_;};
+    std::string to_s(void);
     
   private:
     // links
@@ -65,7 +66,6 @@ namespace mazes {
     int get_size(void){return rows_*columns_;};
 
     std::string to_string(void);
-    std::string to_string_better(void);
   private:
     // allocs the cells in the grid
     void prepare_grid(void);

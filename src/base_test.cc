@@ -141,14 +141,13 @@ TEST(TestGrid, TestRandom) {
 }
 
 void print_cell(mazes::cell* cptr) {
-  std::cout << "(" << cptr->get_row() << "," << cptr->get_col() << ")" << std::endl;
+  std::cout << cptr->to_s() << std::endl;
 }
 
 typedef std::vector<mazes::cell>::iterator cell_vec_iter;
 void print_row(cell_vec_iter start, cell_vec_iter end) {
   cell_vec_iter curr;
   for (curr = start; curr != end; ++curr) {
-    //std::cout << (*curr).get_north() << " ";
     print_cell(&(*curr));
   }
   std::cout << std::endl;

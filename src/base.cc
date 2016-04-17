@@ -5,6 +5,7 @@
 #include <random>
 #include <string>
 #include <iostream>
+#include <sstream>
 
 
 namespace mazes {
@@ -42,7 +43,7 @@ namespace mazes {
       }
     }
   }
-  
+
   bool cell::is_linked(cell* other) {
     if (!other) {
       return false;
@@ -58,7 +59,13 @@ namespace mazes {
     std::vector<cell*> res = {north_, south_, east_, west_};
     return res;
   }
-  
+
+  std::string cell::to_s(void) {
+    std::ostringstream oss;
+    oss << "(" << row_ << "," << column_ << ")";
+    return oss.str();
+  }
+
   // grid stuff
   grid::grid(int rows, int columns) {
     rows_ = rows;
@@ -71,7 +78,7 @@ namespace mazes {
     // but what about array bounds?
     if( row < rows_ && row > -1 && col < columns_  && col > -1 ) {
       return (&(cell_array_[row*columns_+col]));
-    } 
+    }
     return nullptr;
   }
 
@@ -106,7 +113,7 @@ namespace mazes {
       work_fn(row_start, row_end);
     }
   }
-  
+
   void grid::prepare_grid(void) {
     // allocate the cell array
     for (int i = 0; i < rows_; i++) {
@@ -115,7 +122,7 @@ namespace mazes {
       }
     }
   }
-  
+
   void grid::configure_cells(void) {
     for (int i = 0; i< rows_; i++) {
       for (int j = 0; j< columns_; j++) {
@@ -127,18 +134,19 @@ namespace mazes {
       }
     }
   }
-   
-  std::string grid::to_string_better(void) {
-    std::string output = "+";
+
+  std::string grid::to_string(void) {
+    std::ostringstream output;
     std::string top = "";
     std::string bottom = "";
     std::string body = "";
     cell* cptr = nullptr;
-    
+
+    output << "+";
     for (int i = 0; i < columns_; i++) {
-      output += "---+";
+      output << "---+";
     }
-    output +="\n";
+    output << "\n";
 
     for (int i = rows_ - 1; i > -1; i--) {
       top = "|";
@@ -146,7 +154,7 @@ namespace mazes {
       for(int j = 0; j < columns_; j++) {
         cptr = get_cell_at_loc(i, j);
         top += "   ";
-        if (cptr->is_linked(cptr->get_east()) || cptr->get_east() == nullptr) {
+        if (!cptr->is_linked(cptr->get_east()) || cptr->get_east() == nullptr) {
           top += "|";
         } else {
           top += " ";
@@ -158,48 +166,9 @@ namespace mazes {
         }
         bottom += "+"; // add a corner
       }
-      output += top + "\n";
-      output += bottom  + "\n";
+      output << top << "\n";
+      output << bottom  << "\n";
     }
-    return output;
-  }
-  
-  std::string grid::to_string(void) {
-    std::string output = "";
-    cell* cptr = nullptr; 
-
-    for (int i = 0; i < rows_; i++) {
-
-      for (int j = 0; j < columns_; j++) {
-        cptr = get_cell_at_loc(i, j);
-        output += "+";
-        if (cptr->is_linked(cptr->get_south())) {
-          output += "---";
-        } else {
-          output += "   ";
-        }
-      }
-      output += "+\n";
-
-      output += "|   ";
-      for (int j = 1; j < columns_ - 1; j++) {
-        cptr = get_cell_at_loc(i, j);
-        if (cptr->is_linked(cptr->get_east())) {
-          output += "|";
-        } else {
-          output += " ";
-        }
-        output += "   ";
-      }
-      output += "|   |\n";
-
-    }
-
-    for (int i = 0; i < columns_; i++) {
-      output += "+---";
-    }
-    output += "+\n";
-    
-    return output;
+    return output.str();
   }
 }  // mazes
