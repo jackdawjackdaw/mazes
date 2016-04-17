@@ -136,35 +136,50 @@ namespace mazes {
   }
 
   std::string grid::to_string(void) {
+    // There's really no need for this to be an ostringstream instead
+    // of just a regular stringy string.
     std::ostringstream output;
     std::string top = "";
     std::string bottom = "";
-    std::string body = "";
     cell* cptr = nullptr;
 
-    output << "+";
+    const std::string corner = "╬";
+    const std::string rcorner = "╠"; // connects right only;
+    const std::string lcorner = "╣"; // connects left only
+    const std::string tcorner = "╦";
+    const std::string bcorner = "╩";
+    const std::string edge = "║";
+    const std::string empty_edge = " ";
+    const std::string empty_cell = "   ";
+    const std::string cell_roof = "═══";
+
+    output << corner;
     for (int i = 0; i < columns_; i++) {
-      output << "---+";
+      output << cell_roof << tcorner;
     }
     output << "\n";
 
     for (int i = rows_ - 1; i > -1; i--) {
-      top = "|";
-      bottom = "+";
+      top = edge;
+      bottom = rcorner;
       for(int j = 0; j < columns_; j++) {
         cptr = get_cell_at_loc(i, j);
-        top += "   ";
+        top += empty_cell;
         if (!cptr->is_linked(cptr->get_east()) || cptr->get_east() == nullptr) {
-          top += "|";
+          top += edge;
         } else {
-          top += " ";
+          top += empty_edge;
         }
         if (cptr->is_linked(cptr->get_south())) {
-          bottom += "   ";
+          bottom += empty_cell;
         } else {
-          bottom += "---";
+          bottom += cell_roof;
         }
-        bottom += "+"; // add a corner
+        if( j < columns_ - 1) {
+          bottom += corner; // add a corner "+"
+        } else {
+          bottom += lcorner;
+        }
       }
       output << top << "\n";
       output << bottom  << "\n";
