@@ -1,16 +1,26 @@
 #include "base.h"
+#include "gen_algs.h"
+#include <functional>
 #include <vector>
 #include <random>
 #include <iostream>
 
-// TODO(chris): make this into a strategy pattern
-// Store the RNG as internal state and init it each time
-// TODO(chris): figure out how to test this, does it even work?
 
-namespace {
-  std::default_random_engine rando(1); // stupid seed but that's ok for now
+namespace mazes {
+  binary_tree_generator::binary_tree_generator() {
+    // currently default seed, figure out a random one here
+    rng_ = new std::default_random_engine(213);
+  }
 
-  void bin_tree_helper(mazes::cell* cptr) {
+  binary_tree_generator::~binary_tree_generator() {
+    delete rng_;
+  }
+
+  void binary_tree_generator::gen_maze(mazes::grid* in_grid) {
+    in_grid->each_cell([this](mazes::cell* cptr){this->bin_tree_helper(cptr);});
+  }
+
+  void binary_tree_generator::bin_tree_helper(mazes::cell* cptr) {
     std::vector<mazes::cell*> neighbours;
     if (cptr->get_north()) {
       neighbours.push_back(cptr->get_north());
@@ -18,23 +28,13 @@ namespace {
     if (cptr->get_east()) {
       neighbours.push_back(cptr->get_east());
     }
-    //std::cout << cptr->to_s() << ":" << neighbours.size();
-
     if (neighbours.size() > 0) {
       // pick one
       std::uniform_int_distribution<int> n_dist(0, neighbours.size()-1);
-      int n_index = n_dist(rando);
-      //std::cout << " idx: " << n_index;
+      int n_index = n_dist(*rng_);
       mazes::cell* other = neighbours[n_index];
-      //std::cout << " other: " << other->to_s();
       cptr->link(other, true);
     }
-    //std::cout << std::endl;
   }
-} // end anonymous namespace
-
-namespace mazes {
-  void BinaryTree(grid* in_grid) {
-    in_grid->each_cell(bin_tree_helper);
-  }
+  
 } // mazes
