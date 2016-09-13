@@ -95,7 +95,7 @@ namespace mazes {
   }
 
   // do something to each cell
-  void grid::each_cell(std::function<void (cell*)> work_fn) {
+  void grid::each_cell(const std::function<void (cell*)>& work_fn) {
     for (int i = 0; i < rows_; i++) { // rows go south (0) to north (rows_-1)
       for(int j = 0; j < columns_; j++) { // cols go west (0) to east (cols_-1)
         work_fn(get_cell_at_loc(i, j));
@@ -105,7 +105,8 @@ namespace mazes {
 
   typedef std::vector<cell>::iterator cell_vec_iter;
 
-  void grid::each_row(std::function<void (cell_vec_iter, cell_vec_iter)> work_fn) {
+  void grid::each_row(const std::function<void (cell_vec_iter,
+                                                cell_vec_iter)>& work_fn) {
     cell_vec_iter row_start, row_end;
     for (int i = 0; i < rows_; i++) {
       row_start = cell_array_.begin() + i*rows_;
